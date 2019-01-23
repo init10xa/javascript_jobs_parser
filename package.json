@@ -1,0 +1,35 @@
+{
+  "name": "javascript_jobs_parser",
+  "version": "1.0.0",
+  "description": "Tekegram @javascript_jobs_feed parser and APi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikfakel/javascript_jobs_parser.git"
+  },
+  "keywords": [
+    "telegram",
+    "parser",
+    "javascript"
+  ],
+  "author": "nikfakel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nikfakel/javascript_jobs_parser/issues"
+  },
+  "homepage": "https://github.com/nikfakel/javascript_jobs_parser#readme",
+  "devDependencies": {
+    "@types/express": "^4.16.1",
+    "@types/node": "^10.12.18",
+    "nodemon": "^1.18.9",
+    "ts-node": "^8.0.1",
+    "typescript": "^3.2.4"
+  },
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
