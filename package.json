@@ -1,14 +1,14 @@
 {
   "name": "javascript_jobs_parser",
   "version": "1.0.0",
-  "description": "Tekegram @javascript_jobs_feed parser and APi",
+  "description": "Telegram @javascript_jobs_feed parser and APi",
   "main": "index.js",
   "scripts": {
     "build-ts": "tsc",
     "postinstall": "npm run build-ts",
-    "start": "npm run serve",
+    "build": "npm run serve",
     "serve": "node dist/index.js",
-    "start:dev": "nodemon src/index.ts"
+    "start": "nodemon src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,10 @@
     "typescript": "^3.2.4"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.11",
+    "telegram-mtproto": "3.1.*",
+    "uuid": "^3.3.2"
   }
 }
