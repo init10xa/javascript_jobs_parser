@@ -1,20 +1,22 @@
+import {MONGODB} from "./constants";
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/parser', {
+
+mongoose.connect(MONGODB, {
   useNewUrlParser: true
 });
 
 export const db = mongoose.connection;
 
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', (err:any) => console.error(JSON.stringify(err, null ,2)));
 db.once('open', function() {
-  // we're connected!
+  console.log('MongoDB connected!')
 });
 
 export const Post = mongoose.model('Posts', {
   uuid: String,
   content: String,
-  tgMessageIndex: Number, //id 7381975040
+  tgMessageIndex: Number,
   tags: Array(String),
-  date: Number, // date 1550062222
+  date: Number,
   postType: String,
 });
