@@ -33,10 +33,12 @@
     "typescript": "^3.2.4"
   },
   "dependencies": {
+    "@types/uuid": "^3.4.4",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "mongoose": "^5.4.11",
-    "telegram-mtproto": "3.1.*",
+    "tdl": "^5.2.0",
+    "tlg": "^1.1.4",
     "uuid": "^3.3.2"
   }
 }

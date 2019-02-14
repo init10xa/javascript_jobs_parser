@@ -12,9 +12,9 @@ db.once('open', function() {
 
 export const Post = mongoose.model('Posts', {
   uuid: String,
-  fullDescription: String,
-  index: Number,
+  content: String,
+  tgMessageIndex: Number, //id 7381975040
   tags: Array(String),
-  pubDate: Number,
+  date: Number, // date 1550062222
   postType: String,
 });
