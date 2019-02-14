@@ -7,8 +7,8 @@
     "build-ts": "tsc",
     "postinstall": "npm run build-ts",
     "build": "npm run serve",
-    "serve": "node dist/index.js",
-    "start": "nodemon src/index.ts"
+    "serve": "node dist/index.js NODE_ENV=production",
+    "start": "nodemon src/index.ts NODE_ENV=development"
   },
   "repository": {
     "type": "git",

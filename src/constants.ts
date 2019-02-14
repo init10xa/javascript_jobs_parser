@@ -1,4 +1,8 @@
-require('dotenv').config();
+export const PRODUCTION = process.env.NODE_ENV === 'production';
+
+if (!PRODUCTION) {
+  require('dotenv').config();
+}
 
 export const API_ID = process.env.API_ID;
 export const API_HASH =  process.env.API_HASH;
