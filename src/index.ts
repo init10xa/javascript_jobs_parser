@@ -30,3 +30,5 @@ app.post('/get-post', getPost);
 app.post('/dev-regenerate-posts', regeneratePosts);
 
 parser();
+
+console.log(process.env);
