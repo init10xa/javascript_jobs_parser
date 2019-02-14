@@ -14,4 +14,4 @@ export enum dateRanges {
 export const JSJOBS_CHANNEL_ID = -1001110946746;
 
 export const API_ID = process.env.API_ID;
-export const API_HASH = process.env.API_HASH;
+export const API_HASH =  process.env.API_HASH;

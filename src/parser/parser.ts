@@ -3,21 +3,21 @@ import {API_HASH, API_ID, JSJOBS_CHANNEL_ID, postTypes} from "../constants";
 import {Client} from 'tdl';
 import uuidv from 'uuid/v4';
 
-
 export function parser() {
   main();
 
   async function main() {
+    const API_ID_DEFINED = API_ID ? API_ID : '2222';
 
     try {
       const client = new Client({
-        apiId: API_ID, // Your api_id
+        apiId: +API_ID_DEFINED, // Your api_id
         apiHash: API_HASH, // Your api_hash
       });
 
       await client.connect();
       // const login = await client.login(()=> ({
-      //   phoneNumber: '+79634802365'
+      //   phoneNumber: ''
       // }));
 
       client
