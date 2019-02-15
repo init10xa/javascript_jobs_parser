@@ -7,7 +7,7 @@ import {regeneratePosts} from "./routes/development/development"
 import {getPost} from "./routes/get-post/get-post";
 import {parser} from "./parser/parser";
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.use(function(req: any, res: any, next: any) {
   res.header("Access-Control-Allow-Origin", "*");
