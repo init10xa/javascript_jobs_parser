@@ -6,7 +6,7 @@
   "scripts": {
     "build-ts": "tsc",
     "postinstall": "npm run build-ts",
-    "build": "npm run serve",
+    "build": "rm -rf dist && npm run build-ts",
     "serve": "node dist/index.js NODE_ENV=production",
     "start": "nodemon src/index.ts NODE_ENV=development"
   },
