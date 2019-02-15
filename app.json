@@ -1,0 +1,23 @@
+{
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "description": "@javascript_jobs channel parser",
+  "env": {
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "name": "javascript_jobs_parser",
+  "scripts": {
+    "postdeploy": "npm run serve"
+  },
+  "stack": "heroku-18"
+}
