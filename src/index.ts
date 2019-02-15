@@ -6,7 +6,6 @@ import {getPosts} from "./routes/get-posts/get-posts.route"
 import {regeneratePosts} from "./routes/development/development"
 import {getPost} from "./routes/get-post/get-post";
 import {parser} from "./parser/parser";
-console.log(process.env);
 
 const port = 5000;
 
