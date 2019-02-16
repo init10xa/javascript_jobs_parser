@@ -4,7 +4,7 @@ import {dateRanges, postTypes} from "../../constants";
 export function getPosts(req: any, res: any) {
   const {keywords, postType, date} = req.body;
 
-  const searchOptions: {tags?: { $in: string[]}, postType?: postTypes, pubDate?: { $gte: number} } = {};
+  const searchOptions: {tags?: { $in: string[]}, postType?: postTypes, date?: { $gte: number} } = {};
 
   if (keywords && keywords instanceof Array && keywords.length < 10) {
     const keywordsItems: string[] = [];
@@ -23,8 +23,8 @@ export function getPosts(req: any, res: any) {
   if (date) {
     const pubDate = dateToUnixDate(date);
     const unixTimeNow = +new Date();
-    const searchFromDate = unixTimeNow - pubDate;
-    searchOptions.pubDate = { $gte: searchFromDate}
+    const searchFromDate = +((unixTimeNow - pubDate) / 1000).toFixed(0);
+    searchOptions.date = { $gte: searchFromDate}
   }
 
   if (postType && (postType === (postTypes.vacancy || postTypes.resume))) {

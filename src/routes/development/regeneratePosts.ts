@@ -43,3 +43,4 @@ export const regeneratePosts = async (req:any, res:any) => {
     console.log(JSON.stringify(err, null, 2));
   }
 };
+

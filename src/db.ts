@@ -3,7 +3,7 @@ import uuidv from 'uuid/v4';
 const mongoose = require('mongoose');
 
 mongoose.connect(MONGODB, {
-  useNewUrlParser: true
+  useNewUrlParser: true,
 });
 
 export const db = mongoose.connection;
@@ -71,6 +71,6 @@ export function findHashtags(searchText: any) {
 export function getPostType(tags: any) {
   const dictionary = ['вакансия', 'job', 'vacancy'];
   return dictionary.some((item: string) => {
-    return tags.some((tag: string) => tag === item)
+    return tags.some((tag: string) => tag.toLowerCase() === item.toLowerCase())
   }) ? postTypes.vacancy : postTypes.resume;
 }
