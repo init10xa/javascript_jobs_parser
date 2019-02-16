@@ -68,7 +68,7 @@ export function parser() {
       }
 
       function findHashtags(searchText: any) {
-        const regexp = /(\s|^)#\w\w+\b/gm;
+        const regexp = /(|^)#[a-zA-Zа-яА-ЯёЁ]+/gm;
         let result = searchText.match(regexp);
         if (result) {
           result = result.map(function (s: any) {
