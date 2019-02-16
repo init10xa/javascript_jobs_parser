@@ -26,7 +26,7 @@ export function formatMessageToMongoModel(message: any) {
   const text = message.content.text.text;
 
   const tags = findHashtags(text);
-  const postType = tags.length ? postTypes.resume : getPostType(tags);
+  const postType = tags.length ? postTypes.resume : setPostType(tags);
 
   return {
     uuid: uuidv(),
@@ -68,9 +68,21 @@ export function findHashtags(searchText: any) {
   }
 }
 
-export function getPostType(tags: any) {
-  const dictionary = ['вакансия', 'job', 'vacancy'];
-  return dictionary.some((item: string) => {
-    return tags.some((tag: string) => tag.toLowerCase() === item.toLowerCase())
-  }) ? postTypes.vacancy : postTypes.resume;
+const dictionary = [
+  'вакансия',
+  'vacancy',
+  'job'
+];
+
+export function setPostType(tags: any) {
+  if (tags) {
+    const isVacancy = tags.some((tag: string) => {
+      return dictionary.some((dictionaryItem:string) => {
+        return dictionaryItem === tag.toLowerCase();
+      })
+    });
+    return isVacancy ? postTypes.vacancy : postTypes.resume;
+  } else {
+    return postTypes.resume
+  }
 }

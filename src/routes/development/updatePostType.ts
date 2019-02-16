@@ -1,5 +1,4 @@
-import {Post} from "../../db";
-import {postTypes} from "../../constants";
+import {Post, setPostType} from "../../db";
 
 export const updatePostType = async (req: any, res: any)  => {
   const updatedPosts: any[] = [];
@@ -20,22 +19,3 @@ export const updatePostType = async (req: any, res: any)  => {
     answer: updatedPosts
   });
 };
-
-const dictionary = [
-  'вакансия',
-  'vacancy',
-  'job'
-];
-
-function setPostType(tags: string[]) {
-  if (tags) {
-    const isVacancy = tags.some((tag: string) => {
-      return dictionary.some((dictionaryItem:string) => {
-        return dictionaryItem === tag.toLowerCase();
-      })
-    });
-    return isVacancy ? postTypes.vacancy : postTypes.resume;
-  } else {
-    return postTypes.resume
-  }
-}
