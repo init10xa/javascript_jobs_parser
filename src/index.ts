@@ -1,5 +1,3 @@
-import {updatePostType} from "./routes/development/updatePostType";
-
 const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
@@ -8,6 +6,7 @@ import {getPosts} from "./routes/get-posts/get-posts.route"
 import {getPost} from "./routes/get-post/get-post";
 import {parser} from "./parser/parser";
 import {regeneratePosts} from "./routes/development/regeneratePosts";
+import {checkAndUpdateAllPosts} from "./routes/development/check-and-update-all-posts";
 
 const port = process.env.PORT || 5000;
 
@@ -30,6 +29,6 @@ app.listen(port, () => {
 app.post('/get-posts', getPosts);
 app.post('/get-post', getPost);
 app.post('/dev-regenerate-posts', regeneratePosts);
-app.post('/dev-update-post-type', updatePostType);
+app.post('/dev-check-and-update-all-posts', checkAndUpdateAllPosts);
 
 parser();

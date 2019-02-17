@@ -1,5 +1,6 @@
 import {MONGODB, postTypes} from "./constants";
 import uuidv from 'uuid/v4';
+import {messageText} from "tdl/types/tdlib";
 const mongoose = require('mongoose');
 
 mongoose.connect(MONGODB, {
@@ -23,10 +24,8 @@ export const Post = mongoose.model('Posts', {
 });
 
 export function formatMessageToMongoModel(message: any) {
-  const text = message.content.text.text;
-
-  const tags = findHashtags(text);
-  const postType = tags.length ? postTypes.resume : setPostType(tags);
+  const rowContent = message.content.text.text;
+  const {tags, text, postType} = getPostParamsFromRawMessage(rowContent);
 
   return {
     uuid: uuidv(),
@@ -40,9 +39,8 @@ export function formatMessageToMongoModel(message: any) {
 
 export async function saveMessageToDB(message: any) {
   if (message && message.content && message.content.text && message.content.text.text) {
-    const messageFormattedToMongoModel = formatMessageToMongoModel(message);
     const post = new Post(
-      messageFormattedToMongoModel
+      formatMessageToMongoModel(message)
     );
 
     try {
@@ -55,34 +53,18 @@ export async function saveMessageToDB(message: any) {
   }
 }
 
-export function findHashtags(searchText: any) {
+export function getPostParamsFromRawMessage(rawText: messageText["text"]["text"]) {
   const regexp = /(|^)#[a-zA-Zа-яА-ЯёЁ]+/gm;
-  let result = searchText.match(regexp);
-  if (result) {
-    result = result.map(function (s: any) {
-      return s.trim().substr(1);
-    });
-    return result;
-  } else {
-    return [];
-  }
-}
+  let hashtags = rawText.match(regexp);
+  const tags = hashtags && hashtags.map( (tag: string) => tag.trim().substr(1));
 
-const dictionary = [
-  'вакансия',
-  'vacancy',
-  'job'
-];
+  const postType = rawText.match(/(Обсуждение вакансии в чате)/) ? postTypes.vacancy : postTypes.resume;
 
-export function setPostType(tags: any) {
-  if (tags) {
-    const isVacancy = tags.some((tag: string) => {
-      return dictionary.some((dictionaryItem:string) => {
-        return dictionaryItem === tag.toLowerCase();
-      })
-    });
-    return isVacancy ? postTypes.vacancy : postTypes.resume;
-  } else {
-    return postTypes.resume
-  }
+  const text = rawText
+    .replace(/(—(\s|\s\s)👉 Обсуждение (резюме|вакансии) в чате @javascript_jobs)/gmu, '')
+    .replace(regexp, '')
+    .replace(/(\r\n|\r|\n){2}/g, '$1')
+    .replace(/(\r\n|\r|\n){3,}/g, '$1\n');
+
+  return {tags, text, postType};
 }
