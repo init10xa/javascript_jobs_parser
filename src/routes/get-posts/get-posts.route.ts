@@ -20,14 +20,14 @@ export function getPosts(req: any, res: any) {
     }
   }
 
-  if (date) {
+  if (date && Object.values(dateRanges).some((item) => item === date)) {
     const pubDate = dateToUnixDate(date);
     const unixTimeNow = +new Date();
     const searchFromDate = +((unixTimeNow - pubDate) / 1000).toFixed(0);
     searchOptions.date = { $gte: searchFromDate}
   }
 
-  if (postType && (postType === (postTypes.vacancy || postTypes.resume))) {
+  if (postType && (postType === postTypes.resume || postType === postTypes.vacancy)) {
     searchOptions.postType = postType;
   }
 
@@ -38,7 +38,7 @@ export function getPosts(req: any, res: any) {
   });
 }
 
-const dateToUnixDate = (date: dateRanges) => {
+const dateToUnixDate = (date: dateRanges): number => {
   switch (date) {
     case dateRanges.lastDay:
       return 24 * 60 * 60 * 1000;
