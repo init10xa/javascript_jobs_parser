@@ -5,7 +5,7 @@ import {client} from "../../tdlib-connect";
 
 export const regeneratePosts = async (req: any, res: any) => {
   try {
-    await Post.deleteMany({}, function(err: any) { // remove all posts
+    await Post.deleteMany({}, (err: any) => { // remove all posts
       if (err) {
         console.log(err);
       }
@@ -15,8 +15,8 @@ export const regeneratePosts = async (req: any, res: any) => {
       _: "getChatHistory",
       chat_id: JSJOBS_CHANNEL_ID,
       from_message_id: 0,
-      offset: 0,
       limit: 1,
+      offset: 0,
       only_local: false,
     });
 
@@ -26,8 +26,8 @@ export const regeneratePosts = async (req: any, res: any) => {
       _: "getChatHistory",
       chat_id: JSJOBS_CHANNEL_ID,
       from_message_id: lastMessageId,
-      offset: 0,
       limit: 100,
+      offset: 0,
       only_local: false,
     });
 
@@ -44,4 +44,3 @@ export const regeneratePosts = async (req: any, res: any) => {
     console.log(JSON.stringify(err, null, 2));
   }
 };
-

@@ -1,6 +1,5 @@
-const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
+import bodyParser from "body-parser";
+import express from "express";
 
 import {parser} from "./parser/parser";
 import {checkAndUpdateAllPosts} from "./routes/development/check-and-update-all-posts";
@@ -9,8 +8,9 @@ import {getPost} from "./routes/get-post/get-post";
 import {getPosts} from "./routes/get-posts/get-posts.route";
 
 const port = process.env.PORT || 5000;
+const app = express();
 
-app.use(function(req: any, res: any, next: any) {
+app.use((req: any, res: any, next: any) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();

@@ -1,7 +1,7 @@
 export const PRODUCTION = process.env.NODE_ENV === "production";
 
 if (!PRODUCTION) {
-  require("dotenv").config();
+  /* tslint:disable */ require("dotenv").config(); /* tslint:enable */
 }
 
 export const API_ID = process.env.API_ID;

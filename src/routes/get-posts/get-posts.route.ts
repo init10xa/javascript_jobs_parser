@@ -37,9 +37,9 @@ export function getPosts(req: any, res: any) {
       return {
         content: doc.content,
         date: doc.date,
-        uuid: doc.uuid,
-        tags: doc.tags,
         postType: doc.postType,
+        tags: doc.tags,
+        uuid: doc.uuid,
       };
     });
     res.send({

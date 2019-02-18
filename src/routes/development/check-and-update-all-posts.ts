@@ -7,29 +7,29 @@ import {client} from "../../tdlib-connect";
 export async function checkAndUpdateAllPosts(req: any, res: any) {
   try {
     await Post.deleteMany({}, (err: any) => {
-      if (err) {console.log(err);}
+      if (err) {console.log(err); }
     });
 
     const lastMessage: messages = await client.invoke({
       _: "getChatHistory",
       chat_id: JSJOBS_CHANNEL_ID,
       from_message_id: 0,
-      offset: 0,
       limit: 1,
+      offset: 0,
     });
 
-    const lastMessageId = lastMessage.messages[0].id;
+    const firstMessageId = lastMessage.messages[0].id;
 
     let count = 0;
-    const messages = await getLastMessages(lastMessageId, 0, []);
-    if (messages) {
-      messages.forEach((item: message) => {
+    const messagesArray = await getLastMessages(firstMessageId, 0, []);
+    if (messagesArray) {
+      messagesArray.forEach((item: message) => {
         saveMessageToDB(item);
       });
     }
 
     res.json({
-      answer: messages,
+      answer: messagesArray,
     });
 
     async function getLastMessages(
@@ -41,17 +41,17 @@ export async function checkAndUpdateAllPosts(req: any, res: any) {
       count++;
       if (newLastMessageId !== oldLastMessageId && count < 4) {
         try {
-          const messages = await client.invoke({
+          const rawMessages = await client.invoke({
             _: "getChatHistory",
             chat_id: JSJOBS_CHANNEL_ID,
             from_message_id: newLastMessageId,
-            offset: 0,
             limit: 2,
+            offset: 0,
           });
 
           const savedLastMessageId = newLastMessageId;
-          const lastMessageId = messages.messages[messages.messages.length - 1].id;
-          messageArray.push(...messages.messages);
+          const lastMessageId = rawMessages.messages[rawMessages.messages.length - 1].id;
+          messageArray.push(...rawMessages.messages);
 
           return await getLastMessages(lastMessageId, savedLastMessageId, messageArray);
         } catch (err) {

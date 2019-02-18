@@ -15,7 +15,6 @@ export function getPost(req: any, res: any) {
         post: docs,
       });
       res.end();
-
     });
   }
 }
