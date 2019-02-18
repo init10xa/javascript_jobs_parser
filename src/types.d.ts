@@ -1,10 +1,10 @@
-import {postTypes} from "./constants";
 import {v4} from "uuid/interfaces";
+import {postTypes} from "./constants";
 
-declare type IPost = {
-  date: number,
-  postType: postTypes,
-  content: string,
-  tags: string[],
-  uuid: v4,
+declare interface IPost {
+  date: number;
+  postType: postTypes;
+  content: string;
+  tags: string[];
+  uuid: v4;
 }

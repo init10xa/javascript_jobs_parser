@@ -1,7 +1,7 @@
-import {API_HASH, API_ID} from "./constants";
 import {Client} from "tdl";
+import {API_HASH, API_ID} from "./constants";
 
-const API_ID_DEFINED = API_ID ? API_ID : '2222'; // Hack TS "probably undefined"
+const API_ID_DEFINED = API_ID ? API_ID : "2222"; // Hack TS "probably undefined"
 
 export const client = new Client({
   apiId: +API_ID_DEFINED, // Your api_id

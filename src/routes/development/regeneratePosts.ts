@@ -1,18 +1,18 @@
 import {JSJOBS_CHANNEL_ID} from "../../constants";
 import {Post} from "../../db";
-import {client} from "../../tdlib-connect";
 import {saveMessageToDB} from "../../parser/formatPost";
+import {client} from "../../tdlib-connect";
 
-export const regeneratePosts = async (req:any, res:any) => {
+export const regeneratePosts = async (req: any, res: any) => {
   try {
-    await Post.deleteMany({}, function (err: any) { // remove all posts
+    await Post.deleteMany({}, function(err: any) { // remove all posts
       if (err) {
-        console.log(err)
+        console.log(err);
       }
     });
 
-    const lastMessage:any = await client.invoke({
-      _: 'getChatHistory',
+    const lastMessage: any = await client.invoke({
+      _: "getChatHistory",
       chat_id: JSJOBS_CHANNEL_ID,
       from_message_id: 0,
       offset: 0,
@@ -23,7 +23,7 @@ export const regeneratePosts = async (req:any, res:any) => {
     const lastMessageId = lastMessage.messages[0].id;
 
     const lastMessages: any = await client.invoke({
-      _: 'getChatHistory',
+      _: "getChatHistory",
       chat_id: JSJOBS_CHANNEL_ID,
       from_message_id: lastMessageId,
       offset: 0,
@@ -38,10 +38,10 @@ export const regeneratePosts = async (req:any, res:any) => {
     });
 
     res.json({
-      answer: allLastMessages
+      answer: allLastMessages,
     });
   } catch (err) {
     console.log(JSON.stringify(err, null, 2));
   }
 };
-
+

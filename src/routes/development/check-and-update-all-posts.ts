@@ -1,24 +1,24 @@
-import {client} from "../../tdlib-connect";
-import {JSJOBS_CHANNEL_ID} from "../../constants";
 import {message, messages} from "tdl/types/tdlib";
+import {JSJOBS_CHANNEL_ID} from "../../constants";
 import {Post} from "../../db";
 import {saveMessageToDB} from "../../parser/formatPost";
+import {client} from "../../tdlib-connect";
 
 export async function checkAndUpdateAllPosts(req: any, res: any) {
   try {
     await Post.deleteMany({}, (err: any) => {
-      if (err) {console.log(err)}
+      if (err) {console.log(err);}
     });
 
     const lastMessage: messages = await client.invoke({
-      _: 'getChatHistory',
+      _: "getChatHistory",
       chat_id: JSJOBS_CHANNEL_ID,
       from_message_id: 0,
       offset: 0,
       limit: 1,
     });
 
-    let lastMessageId = lastMessage.messages[0].id;
+    const lastMessageId = lastMessage.messages[0].id;
 
     let count = 0;
     const messages = await getLastMessages(lastMessageId, 0, []);
@@ -35,14 +35,14 @@ export async function checkAndUpdateAllPosts(req: any, res: any) {
     async function getLastMessages(
       newLastMessageId: message["id"],
       oldLastMessageId: message["id"],
-      messagesStack: message[]
+      messagesStack: message[],
     ): Promise<message[]|undefined> {
       const messageArray = [...messagesStack];
       count++;
       if (newLastMessageId !== oldLastMessageId && count < 4) {
         try {
           const messages = await client.invoke({
-            _: 'getChatHistory',
+            _: "getChatHistory",
             chat_id: JSJOBS_CHANNEL_ID,
             from_message_id: newLastMessageId,
             offset: 0,
@@ -57,8 +57,8 @@ export async function checkAndUpdateAllPosts(req: any, res: any) {
         } catch (err) {
           console.log(err);
           res.json({
-            err: err,
-          })
+            err,
+          });
         }
       } else {
         return messageArray;
@@ -67,7 +67,7 @@ export async function checkAndUpdateAllPosts(req: any, res: any) {
 
   } catch (err) {
     res.json({
-      err: err,
+      err,
     });
 
     console.log(JSON.stringify(err, null, 2));

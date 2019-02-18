@@ -1,6 +1,6 @@
-import {Post} from '../../db';
 import {dateRanges, postTypes} from "../../constants";
-import {IPost} from '../../types';
+import {Post} from "../../db";
+import {IPost} from "../../types";
 
 export function getPosts(req: any, res: any) {
   const {keywords, postType, date} = req.body;
@@ -25,7 +25,7 @@ export function getPosts(req: any, res: any) {
     const pubDate = dateToUnixDate(date);
     const unixTimeNow = +new Date();
     const searchFromDate = +((unixTimeNow - pubDate) / 1000).toFixed(0);
-    searchOptions.date = { $gte: searchFromDate}
+    searchOptions.date = { $gte: searchFromDate};
   }
 
   if (postType && (postType === postTypes.resume || postType === postTypes.vacancy)) {
@@ -33,7 +33,7 @@ export function getPosts(req: any, res: any) {
   }
 
   Post.find(searchOptions, (err: any, docs: IPost[]) => {
-    const cleanedDocs = docs.map((doc: IPost)=> {
+    const cleanedDocs = docs.map((doc: IPost) => {
       return {
         content: doc.content,
         date: doc.date,
@@ -44,7 +44,7 @@ export function getPosts(req: any, res: any) {
     });
     res.send({
       posts: cleanedDocs,
-    })
+    });
   });
 }
 

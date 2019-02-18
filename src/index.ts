@@ -1,12 +1,12 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 
-import {getPosts} from "./routes/get-posts/get-posts.route"
-import {getPost} from "./routes/get-post/get-post";
 import {parser} from "./parser/parser";
-import {regeneratePosts} from "./routes/development/regeneratePosts";
 import {checkAndUpdateAllPosts} from "./routes/development/check-and-update-all-posts";
+import {regeneratePosts} from "./routes/development/regeneratePosts";
+import {getPost} from "./routes/get-post/get-post";
+import {getPosts} from "./routes/get-posts/get-posts.route";
 
 const port = process.env.PORT || 5000;
 
@@ -17,18 +17,18 @@ app.use(function(req: any, res: any, next: any) {
 });
 
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: true,
 }));
 app.use(bodyParser.json());
 
 // start the server
 app.listen(port, () => {
-  console.log('app started on port ' + port);
+  console.log("app started on port " + port);
 });
 
-app.post('/get-posts', getPosts);
-app.post('/get-post', getPost);
-app.post('/dev-regenerate-posts', regeneratePosts);
-app.post('/dev-check-and-update-all-posts', checkAndUpdateAllPosts);
+app.post("/get-posts", getPosts);
+app.post("/get-post", getPost);
+app.post("/dev-regenerate-posts", regeneratePosts);
+app.post("/dev-check-and-update-all-posts", checkAndUpdateAllPosts);
 
 parser();

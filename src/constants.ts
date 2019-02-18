@@ -1,7 +1,7 @@
-export const PRODUCTION = process.env.NODE_ENV === 'production';
+export const PRODUCTION = process.env.NODE_ENV === "production";
 
 if (!PRODUCTION) {
-  require('dotenv').config();
+  require("dotenv").config();
 }
 
 export const API_ID = process.env.API_ID;
