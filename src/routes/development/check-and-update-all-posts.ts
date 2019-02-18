@@ -1,7 +1,8 @@
 import {client} from "../../tdlib-connect";
 import {JSJOBS_CHANNEL_ID} from "../../constants";
 import {message, messages} from "tdl/types/tdlib";
-import {Post, saveMessageToDB} from "../../db";
+import {Post} from "../../db";
+import {saveMessageToDB} from "../../parser/formatPost";
 
 export async function checkAndUpdateAllPosts(req: any, res: any) {
   try {

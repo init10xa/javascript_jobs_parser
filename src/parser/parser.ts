@@ -1,6 +1,6 @@
-import {saveMessageToDB} from "../db";
 import {JSJOBS_CHANNEL_ID} from "../constants";
 import {client} from "../tdlib-connect";
+import {saveMessageToDB} from "./formatPost";
 
 export function parser() {
   main();

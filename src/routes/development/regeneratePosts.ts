@@ -1,6 +1,7 @@
 import {JSJOBS_CHANNEL_ID} from "../../constants";
-import {Post, saveMessageToDB} from "../../db";
+import {Post} from "../../db";
 import {client} from "../../tdlib-connect";
+import {saveMessageToDB} from "../../parser/formatPost";
 
 export const regeneratePosts = async (req:any, res:any) => {
   try {
