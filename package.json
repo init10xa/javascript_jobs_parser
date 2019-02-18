@@ -8,7 +8,9 @@
     "postinstall": "npm run build-ts",
     "build": "rm -rf dist && npm run build-ts",
     "serve": "node dist/index.js NODE_ENV=production",
-    "start": "nodemon src/index.ts NODE_ENV=development"
+    "start": "nodemon src/index.ts NODE_ENV=development",
+    "lint": "tslint './src/**/*.ts*' --format stylish --force",
+    "lint:fix": "tslint './src/**/*.ts*' --fix --format stylish --force"
   },
   "repository": {
     "type": "git",
@@ -39,6 +41,7 @@
     "express": "^4.16.4",
     "mongoose": "^5.4.11",
     "tdl": "^5.2.0",
+    "tslint": "^5.12.1",
     "uuid": "^3.3.2"
   }
 }
