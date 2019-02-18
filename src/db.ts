@@ -61,10 +61,11 @@ export function getPostParamsFromRawMessage(rawText: messageText["text"]["text"]
   const postType = rawText.match(/(Обсуждение вакансии в чате)/) ? postTypes.vacancy : postTypes.resume;
 
   const text = rawText
-    .replace(/(—(\s|\s\s)👉 Обсуждение (резюме|вакансии) в чате @javascript_jobs)/gmu, '')
-    .replace(regexp, '')
-    .replace(/(\r\n|\r|\n){2}/g, '$1')
-    .replace(/(\r\n|\r|\n){3,}/g, '$1\n');
+    .replace(/((\r\n|\r|\n)—(\s|\s\s)👉 Обсуждение (резюме|вакансии) в чате @javascript_jobs)/gmu, '')
+    .replace(regexp, '') // remove hashtags
+    .replace(/(\r\n|\r|\n){2}/g, '$1') // remove double break line
+    .replace(/(\r\n|\r|\n){3,}/g, '$1\n') // remove triple break line
+    .replace(/[\r\n]+$/gm, ''); // remove last break line
 
   return {tags, text, postType};
 }
