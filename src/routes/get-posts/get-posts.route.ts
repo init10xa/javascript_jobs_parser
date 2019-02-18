@@ -1,5 +1,6 @@
 import {Post} from '../../db';
 import {dateRanges, postTypes} from "../../constants";
+import {IPost} from '../../types';
 
 export function getPosts(req: any, res: any) {
   const {keywords, postType, date} = req.body;
@@ -31,9 +32,18 @@ export function getPosts(req: any, res: any) {
     searchOptions.postType = postType;
   }
 
-  Post.find(searchOptions, (err: any, docs: any) => {
+  Post.find(searchOptions, (err: any, docs: IPost[]) => {
+    const cleanedDocs = docs.map((doc: IPost)=> {
+      return {
+        content: doc.content,
+        date: doc.date,
+        uuid: doc.uuid,
+        tags: doc.tags,
+        postType: doc.postType,
+      };
+    });
     res.send({
-      posts: docs,
+      posts: cleanedDocs,
     })
   });
 }
