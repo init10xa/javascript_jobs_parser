@@ -21,7 +21,8 @@ export async function checkAndUpdateAllPosts(req: any, res: any) {
     const firstMessageId = lastMessage.messages[0].id;
 
     let count = 0;
-    const messagesArray = await getLastMessages(firstMessageId, 0, []);
+    const messagesArray = await getLastMessages(firstMessageId, []);
+    console.log(messagesArray && messagesArray.length);
     if (messagesArray) {
       messagesArray.forEach((item: message) => {
         saveMessageToDB(item);
@@ -32,28 +33,32 @@ export async function checkAndUpdateAllPosts(req: any, res: any) {
       answer: messagesArray,
     });
 
+    async function delay(ms: number) {
+      const timer = (ms: number) => new Promise(res => setTimeout(res, ms));
+      await timer(ms);
+    }
+
     async function getLastMessages(
-      newLastMessageId: message["id"],
-      oldLastMessageId: message["id"],
+      lastMessageId: message["id"],
       messagesStack: message[],
     ): Promise<message[]|undefined> {
+      await delay(3000);
       const messageArray = [...messagesStack];
+      console.log(messageArray.length);
       count++;
-      if (newLastMessageId !== oldLastMessageId && count < 4) {
+      if (count < 38) {
         try {
           const rawMessages = await client.invoke({
             _: "getChatHistory",
             chat_id: JSJOBS_CHANNEL_ID,
-            from_message_id: newLastMessageId,
-            limit: 2,
+            from_message_id: lastMessageId,
+            limit: 50,
             offset: 0,
           });
 
-          const savedLastMessageId = newLastMessageId;
-          const lastMessageId = rawMessages.messages[rawMessages.messages.length - 1].id;
+          const newLastMessageId = rawMessages.messages[rawMessages.messages.length - 1].id;
           messageArray.push(...rawMessages.messages);
-
-          return await getLastMessages(lastMessageId, savedLastMessageId, messageArray);
+          return await getLastMessages(newLastMessageId, messageArray);
         } catch (err) {
           console.log(err);
           res.json({
