@@ -1,11 +1,11 @@
-import {dateRanges, postTypes} from "../../constants";
+import {MAX_POSTS_ON_PAGE, postTypes} from "../../constants";
 import {Post} from "../../db";
 import {IPost} from "../../types";
 
-export function getPosts(req: any, res: any) {
+export const getPosts = async (req: any, res: any) => {
   const {keywords, postType, date} = req.body;
 
-  const searchOptions: {tags?: { $in: string[]}, postType?: postTypes, date?: { $gte: number} } = {};
+  const searchOptions: { tags?: { $in: string[] }, postType?: number, date?: { $gte: number } } = {};
 
   if (keywords && keywords instanceof Array && keywords.length < 10) {
     const keywordsItems: string[] = [];
@@ -21,18 +21,32 @@ export function getPosts(req: any, res: any) {
     }
   }
 
-  if (date && Object.values(dateRanges).some((item) => item === date)) {
-    const pubDate = dateToUnixDate(date);
-    const unixTimeNow = +new Date();
-    const searchFromDate = +((unixTimeNow - pubDate) / 1000).toFixed(0);
-    searchOptions.date = { $gte: searchFromDate};
+  const oldestPost = await Post.findOne({}, {}, {created_at: 1});
+  if (!oldestPost) {
+    res.json({err: "Cant find oldest post date"});
+    return;
+  }
+  const oldestPostDate = oldestPost.date;
+  const unixTimeNow = +new Date();
+
+  if (date) {
+    if (date.length === 10 && date > oldestPostDate && date < unixTimeNow) {
+      const searchFromDate = +((unixTimeNow - date) / 1000).toFixed(0);
+      searchOptions.date = {$gte: searchFromDate};
+    } else {
+      res.status(500);
+      res.json({err: "Invalid date format. It should be unix date seconds (1550565694: number)"});
+      return;
+    }
+  } else {
+    searchOptions.date = {$gte: 24 * 60 * 60};
   }
 
   if (postType && (postType === postTypes.resume || postType === postTypes.vacancy)) {
     searchOptions.postType = postType;
   }
 
-  Post.find(searchOptions, (err: any, docs: IPost[]) => {
+  Post.find(searchOptions, null, {limit: MAX_POSTS_ON_PAGE}, (err: any, docs: IPost[]) => {
     const cleanedDocs = docs.map((doc: IPost) => {
       return {
         content: doc.content,
@@ -46,19 +60,4 @@ export function getPosts(req: any, res: any) {
       posts: cleanedDocs,
     });
   });
-}
-
-const dateToUnixDate = (date: dateRanges): number => {
-  switch (date) {
-    case dateRanges.lastDay:
-      return 24 * 60 * 60 * 1000;
-    case dateRanges.lastThreeDays:
-      return 3 * 24 * 60 * 60 * 1000;
-    case dateRanges.lastWeek:
-      return 7 * 24 * 60 * 60 * 1000;
-    case dateRanges.lastMonth:
-      return 30 * 24 * 60 * 60 * 1000;
-    case dateRanges.allPeriod:
-      return 365 * 24 * 60 * 60 * 1000;
-  }
 };

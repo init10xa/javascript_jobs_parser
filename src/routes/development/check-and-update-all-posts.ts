@@ -34,7 +34,7 @@ export async function checkAndUpdateAllPosts(req: any, res: any) {
     });
 
     async function delay(ms: number) {
-      const timer = (ms: number) => new Promise(res => setTimeout(res, ms));
+      const timer = (ms: number) => new Promise((res) => setTimeout(res, ms));
       await timer(ms);
     }
 
