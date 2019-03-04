@@ -1,5 +1,5 @@
 export const PRODUCTION = process.env.NODE_ENV === "production";
-export const MAX_POSTS_ON_PAGE = 20;
+export const POSTS_LIMIT = 100;
 
 if (!PRODUCTION) {
   /* tslint:disable */ require("dotenv").config(); /* tslint:enable */
@@ -12,6 +12,7 @@ export const MONGODB = process.env.MONGODB;
 export enum postTypes {
   vacancy = "Vacancy",
   resume = "Resume",
+  all = "All",
 }
 
 export const JSJOBS_CHANNEL_ID = -1001110946746;

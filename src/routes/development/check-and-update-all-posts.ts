@@ -46,7 +46,7 @@ export async function checkAndUpdateAllPosts(req: any, res: any) {
       const messageArray = [...messagesStack];
       console.log(messageArray.length);
       count++;
-      if (count < 38) {
+      if (count < 30) {
         try {
           const rawMessages = await client.invoke({
             _: "getChatHistory",
@@ -66,6 +66,7 @@ export async function checkAndUpdateAllPosts(req: any, res: any) {
           });
         }
       } else {
+        console.log('I parsed ' + messageArray.length + ' posts!');
         return messageArray;
       }
     }

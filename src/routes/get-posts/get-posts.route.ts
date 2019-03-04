@@ -1,11 +1,17 @@
-import {MAX_POSTS_ON_PAGE, postTypes} from "../../constants";
+import {POSTS_LIMIT, postTypes} from "../../constants";
 import {Post} from "../../db";
 import {IPost} from "../../types";
 
 export const getPosts = async (req: any, res: any) => {
-  const {keywords, postType, date} = req.body;
+  const {dateFrom, dateTo, keywords, postType, limit} = req.body;
+  console.log(dateFrom, dateTo, keywords, postType, limit);
 
-  const searchOptions: { tags?: { $in: string[] }, postType?: number, date?: { $gte: number } } = {};
+  const searchOptions: {
+    tags?:
+      { $in: string[] },
+    postType?: number,
+    date?: { $gte?: number, $lte?: number }
+  } = {};
 
   if (keywords && keywords instanceof Array && keywords.length < 10) {
     const keywordsItems: string[] = [];
@@ -21,32 +27,41 @@ export const getPosts = async (req: any, res: any) => {
     }
   }
 
-  const oldestPost = await Post.findOne({}, {}, {created_at: 1});
-  if (!oldestPost) {
-    res.json({err: "Cant find oldest post date"});
-    return;
-  }
-  const oldestPostDate = oldestPost.date;
-  const unixTimeNow = +new Date();
+  if (dateTo) {
+    if (
+      Number.isInteger(dateTo) &&
+      dateTo > 0
+    ) {
+      searchOptions.date = {$lte: dateTo};
 
-  if (date) {
-    if (date.length === 10 && date > oldestPostDate && date < unixTimeNow) {
-      const searchFromDate = +((unixTimeNow - date) / 1000).toFixed(0);
-      searchOptions.date = {$gte: searchFromDate};
+      if (dateFrom) {
+        if (
+          Number.isInteger(dateFrom) &&
+          dateFrom > 0 &&
+          dateFrom < dateTo &&
+          dateTo < Math.round((+new Date() + 24 * 60 * 60) / 1000) // less then now plus one day
+        ) {
+          searchOptions.date.$gte = dateFrom;
+        } else {
+          res.json({err: "Invalid dateFrom format. It should be unix date seconds (1550565694: number)"});
+          res.end();
+          return false;
+        }
+      }
     } else {
-      res.status(500);
-      res.json({err: "Invalid date format. It should be unix date seconds (1550565694: number)"});
-      return;
+      res.json({err: "Invalid dateTo format. It should be unix date seconds (1550565694: number)"});
+      res.end();
+      return false;
     }
-  } else {
-    searchOptions.date = {$gte: 24 * 60 * 60};
   }
 
-  if (postType && (postType === postTypes.resume || postType === postTypes.vacancy)) {
+  if (postType && (postType === postTypes.resume || postType === postTypes.vacancy || postType === postTypes.all)) {
     searchOptions.postType = postType;
   }
 
-  Post.find(searchOptions, null, {limit: MAX_POSTS_ON_PAGE}, (err: any, docs: IPost[]) => {
+  const limitParam = limit && limit < POSTS_LIMIT ? limit : POSTS_LIMIT;
+
+  Post.find(searchOptions, null, {limit: limitParam}, (err: any, docs: any) => {
     const cleanedDocs = docs.map((doc: IPost) => {
       return {
         content: doc.content,
