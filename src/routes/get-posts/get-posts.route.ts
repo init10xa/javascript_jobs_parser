@@ -9,8 +9,8 @@ export const getPosts = async (req: any, res: any) => {
   const searchOptions: {
     tags?:
       { $in: string[] },
-    postType?: number,
-    date?: { $gte?: number, $lte?: number }
+    postType?: postTypes,
+    date?: { $gte?: number, $lte?: number },
   } = {};
 
   if (keywords && keywords instanceof Array && keywords.length < 10) {
@@ -55,11 +55,13 @@ export const getPosts = async (req: any, res: any) => {
     }
   }
 
-  if (postType && (postType === postTypes.resume || postType === postTypes.vacancy || postType === postTypes.all)) {
+  if (postType && (postType === postTypes.resume || postType === postTypes.vacancy)) {
     searchOptions.postType = postType;
   }
 
   const limitParam = limit && limit < POSTS_LIMIT ? limit : POSTS_LIMIT;
+
+  console.log(searchOptions);
 
   Post.find(searchOptions, null, {limit: limitParam}, (err: any, docs: any) => {
     const cleanedDocs = docs.map((doc: IPost) => {

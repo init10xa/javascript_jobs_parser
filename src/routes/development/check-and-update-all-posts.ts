@@ -66,7 +66,7 @@ export async function checkAndUpdateAllPosts(req: any, res: any) {
           });
         }
       } else {
-        console.log('I parsed ' + messageArray.length + ' posts!');
+        console.log("I parsed " + messageArray.length + " posts!");
         return messageArray;
       }
     }

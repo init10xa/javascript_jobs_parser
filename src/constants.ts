@@ -12,7 +12,6 @@ export const MONGODB = process.env.MONGODB;
 export enum postTypes {
   vacancy = "Vacancy",
   resume = "Resume",
-  all = "All",
 }
 
 export const JSJOBS_CHANNEL_ID = -1001110946746;
