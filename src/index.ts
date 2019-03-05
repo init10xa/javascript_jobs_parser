@@ -3,6 +3,8 @@ import express from "express";
 
 import {parser} from "./parser/parser";
 import {checkAndUpdateAllPosts} from "./routes/development/check-and-update-all-posts";
+import {devArchive} from "./routes/development/createArchive";
+import {getArchive} from "./routes/get-archive/get-archive";
 import {getPost} from "./routes/get-post/get-post";
 import {getPosts} from "./routes/get-posts/get-posts.route";
 
@@ -27,6 +29,9 @@ app.listen(port, () => {
 
 app.post("/get-posts", getPosts);
 app.post("/get-post", getPost);
+app.post("/get-archive", getArchive);
+
+app.post("/dev-archive", devArchive);
 app.post("/dev-check-and-update-all-posts", checkAndUpdateAllPosts);
 
 parser();

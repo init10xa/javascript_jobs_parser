@@ -61,8 +61,6 @@ export const getPosts = async (req: any, res: any) => {
 
   const limitParam = limit && limit < POSTS_LIMIT ? limit : POSTS_LIMIT;
 
-  console.log(searchOptions);
-
   Post.find(searchOptions, null, {limit: limitParam}, (err: any, docs: any) => {
     const cleanedDocs = docs.map((doc: IPost) => {
       return {
